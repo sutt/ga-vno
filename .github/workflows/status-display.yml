@@ -1,0 +1,23 @@
+name: Status Display
+
+on: push
+
+jobs:
+  status-display:
+    name: Status Display Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Status Display
+        uses: actions/github-script@v6
+        with:
+          sithub-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            statuses = ["Preparing...", "Working...", "Done"];
+            statuses.forEach((status) => {
+              github.rest.issues.createComment({
+                owner: "super-jaba",
+                repo: "ga-vno",
+                issue_number: "1",
+                body: status
+              })
+            });
