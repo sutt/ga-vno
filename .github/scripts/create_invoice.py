@@ -97,7 +97,7 @@ class GithubService:
         print("successful comment on", api_url)
 
 
-if __name__ == "__main__":
+def main():
     dotenv.load_dotenv()
 
     # TODO: Null check
@@ -123,21 +123,32 @@ if __name__ == "__main__":
             PR_NUMBER,
             message=f"Please pay the invoice: {invoice.payment_request}"
         )
-
-        # TODO: Refactor
-        is_paid = payment_service.check_payment(
-            invoice.payment_hash,
-            CHECK_PAYMENT_ATTEMPTS,
-            CHECK_PAYMENT_DELAY
-        )  # May run long
-        if is_paid:
-            print("Success!")
-        else:
-            print("Fail!")
-
     except CreateInvoiceException:
         # TODO: Refactor
         print("Couldn't create invoice")
     except GithubException as e:
-        print(GH_TOKEN)
-        print(e.args) 
+        print("Couldn't post payment request")
+        return
+
+    # TODO: Refactor
+    is_paid = payment_service.check_payment(
+        invoice.payment_hash,
+        CHECK_PAYMENT_ATTEMPTS,
+        CHECK_PAYMENT_DELAY
+    )  # May run long
+    if is_paid:
+        gh_service.comment_on_pr(
+            GH_REPO,
+            PR_NUMBER,
+            message=f"Thank you for your payment!"
+        )
+    else:
+        gh_service.comment_on_pr(
+            GH_REPO,
+            PR_NUMBER,
+            message=f"Payment failure"
+        )
+
+
+if __name__ == "__main__":
+    main()
