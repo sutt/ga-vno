@@ -7,10 +7,16 @@ jobs:
     name: Status Display Job
     runs-on: ubuntu-latest
     steps:
-      - name: Run Status Display
+      - name: Creating payment code
         run: |
-          echo "Preparing..."
-          sleep 10
-          echo "Working..."
-          sleep 10
-          echo "Done!"
+          echo "Creating payment code..."
+        script: |
+          await new Promise(r => setTimeout(r, 10000));
+          console.log("Your payment code: sdlfmslflsdf");
+          console.log("You have 10 minutes to pay");
+
+      - name: Checking payment
+        script: |
+          await new Promise(r => setTimeout(r, 15000));
+          console.log("Success!");
+  
