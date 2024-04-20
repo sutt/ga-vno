@@ -17,6 +17,7 @@ jobs:
               github.rest.issues.createComment({
                 owner: "super-jaba",
                 repo: "ga-vno",
+                issue_number: "1",
                 body: status
               })
             });
