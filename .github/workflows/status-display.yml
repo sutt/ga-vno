@@ -8,16 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Creating payment code
-        run: |
-          echo "Creating payment code..."
-        script: |
-          await new Promise(r => setTimeout(r, 10000));
-          console.log("Your payment code: sdlfmslflsdf");
-          console.log("You have 10 minutes to pay");
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            console.log("Creating payment code...");
+            await new Promise(r => setTimeout(r, 10000));
+            console.log("Your payment code: sdlfmslflsdf");
+            console.log("You have 10 minutes to pay");
 
       - name: Checking payment
-        run: echo "Waiting for the payment..."
-        script: |
-          await new Promise(r => setTimeout(r, 15000));
-          console.log("Success!");
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await new Promise(r => setTimeout(r, 15000));
+            console.log("Success!");
   
