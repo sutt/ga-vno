@@ -1,4 +1,5 @@
 import os
+import time
 
 import dotenv
 import requests
@@ -48,8 +49,22 @@ class PaymentService:
         attempts: int = 10,
         delay_seconds: int = 30
     ) -> bool:
-        return True
+        url = f"https://{self.base_url}/api/v1/payments/{payment_hash}"
+        headers = {
+            "X-Api-Key": self.api_key,
+            "Content-Type": "application/json"
+        }
+        
+        # TODO: Refactor
+        for i in range(attempts):
+            print("Attempt", i + 1)
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200 and response.json["paid"]:
+                return True
 
+            time.sleep(delay_seconds)
+        
+        return False
 
 
 if __name__ == "__main__":
