@@ -90,7 +90,8 @@ class GithubService:
 
         # Check the response status
         if response.status_code != 201:
-            raise GithubException(f"Couldn't comment the message. Response status is {response.status_code}")
+            raise GithubException(f"Couldn't comment the message. Response status is {response.status_code}",
+                                  response.json(), sep='\n')
         
         print("successful comment on", api_url)
 
@@ -136,5 +137,5 @@ if __name__ == "__main__":
     except CreateInvoiceException:
         # TODO: Refactor
         print("Couldn't create invoice")
-    except GithubException:
-        print("Couldn't post comment!") 
+    except GithubException as e:
+        print(e.args) 
