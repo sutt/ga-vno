@@ -15,6 +15,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install requirements
+        run: pip install requests python-dotenv
+
       - name: Creating invoice code (check logs)
+        env:
+          WALLET_BASE_URL: ${{secrets.WALLET_BASE_URL}}
+          WALLET_API_KEY: ${{secrets.WALLET_API_KEY}}
+          INVOICE_AMOUNT: 1
+          CHECK_PAYMENT_ATTEMPTS: 10
+          CHECK_PAYMENT_DELAY: 30
         working-directory: .github/scripts
         run: python create_invoice.py
