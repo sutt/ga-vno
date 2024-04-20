@@ -22,4 +22,4 @@ jobs:
       - name: List modified files
         id: list_files
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > files.txt
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
