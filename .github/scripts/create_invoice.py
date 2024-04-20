@@ -91,6 +91,7 @@ class GithubService:
         # Check the response status
         if response.status_code != 201:
             raise GithubException(f"Couldn't comment the message. Response status is {response.status_code}",
+                                  api_url,
                                   response.json())
         
         print("successful comment on", api_url)
