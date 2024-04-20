@@ -23,7 +23,7 @@ jobs:
           WALLET_BASE_URL: ${{secrets.WALLET_BASE_URL}}
           WALLET_API_KEY: ${{secrets.WALLET_API_KEY}}
           INVOICE_AMOUNT: 1
-          CHECK_PAYMENT_ATTEMPTS: 3
+          CHECK_PAYMENT_ATTEMPTS: 10
           CHECK_PAYMENT_DELAY: 10
         working-directory: .github/scripts
         run: python create_invoice.py
