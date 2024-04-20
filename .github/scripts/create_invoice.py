@@ -1,5 +1,6 @@
 import os
 import time
+import subprocess
 
 import dotenv
 import requests
@@ -81,7 +82,9 @@ if __name__ == "__main__":
         payment_service = PaymentService(BASE_URL, API_KEY)
         invoice: Invoice = payment_service.create_invoice(INVOICE_AMOUNT)
 
-        print("Please pay the invoice:", invoice.payment_request)
+        subprocess.run(
+            f"echo Please pay the invoice: {invoice.payment_request}"
+        )
 
         # TODO: Refactor
         is_paid = payment_service.check_payment(
