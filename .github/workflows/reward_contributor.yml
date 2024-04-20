@@ -19,7 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: List modified files
-        id: list_files
+      - name: Run Python script
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+          python .github/scripts/reward_contributor.py
