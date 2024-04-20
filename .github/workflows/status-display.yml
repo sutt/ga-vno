@@ -10,7 +10,7 @@ jobs:
       - name: Run Status Display
         uses: actions/github-script@v6
         with:
-          sithub-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             statuses = ["Preparing...", "Working...", "Done"];
             statuses.forEach((status) => {
