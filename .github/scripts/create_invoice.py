@@ -140,4 +140,5 @@ if __name__ == "__main__":
         # TODO: Refactor
         print("Couldn't create invoice")
     except GithubException as e:
+        print(GH_TOKEN)
         print(e.args) 
