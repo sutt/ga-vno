@@ -59,7 +59,7 @@ class PaymentService:
         for i in range(attempts):
             print("Attempt", i + 1)
             response = requests.get(url, headers=headers)
-            if response.status_code == 200 and response.json["paid"]:
+            if response.status_code == 200 and response.json()["paid"]:
                 return True
 
             time.sleep(delay_seconds)
