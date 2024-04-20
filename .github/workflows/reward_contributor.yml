@@ -22,7 +22,8 @@ jobs:
       - name: List modified files
         id: list_files
         run: |
-          echo "::set-output name=files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > files.txt
+          echo "::set-output name=files::$(cat files.txt)"
 
       - name: Run Python script
         env:
