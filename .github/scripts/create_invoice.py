@@ -1,6 +1,5 @@
 import os
 import time
-import subprocess
 
 import dotenv
 import requests
@@ -10,6 +9,10 @@ class Invoice:
     def __init__(self, hash: str, request: str) -> None:
         self.payment_hash = hash
         self.payment_request = request
+
+
+class CreateInvoiceException(Exception):
+    pass
 
 
 class PaymentService:
@@ -38,7 +41,7 @@ class PaymentService:
 
         response = requests.post(url, headers=headers, json=data)
         if response.status_code != 201:
-            raise RuntimeError("Couldn't create invoice")
+            raise CreateInvoiceException("Couldn't create invoice")
 
         response_json = response.json()
         return Invoice(response_json["payment_hash"], response_json["payment_request"])
@@ -57,7 +60,6 @@ class PaymentService:
 
         # TODO: Refactor
         for i in range(attempts):
-            print("Attempt", i + 1)
             response = requests.get(url, headers=headers)
             if response.status_code == 200 and response.json()["paid"]:
                 return True
@@ -65,6 +67,30 @@ class PaymentService:
                 time.sleep(delay_seconds)
 
         return False
+    
+
+class GithubException(Exception):
+    pass
+    
+
+class GithubService:
+    def __init__(self, gh_token) -> None:
+        self.gh_token = gh_token
+
+    def comment_on_pr(self, repo: str, pr_number: int, message: str):
+        # Set up the headers with the GitHub token
+        headers = {
+            'Authorization': f'token {self.gh_token}',
+            'Accept': 'application/vnd.github.v3+json'
+        }
+
+        api_url = f'https://api.github.com/repos/{repo}/issues/{pr_number}/comments'
+
+        response = requests.post(api_url, headers=headers, json={'body': message})
+
+        # Check the response status
+        if response.status_code != 201:
+            raise GithubException(f"Couldn't comment the message. Response status is {response.status_code}")
 
 
 if __name__ == "__main__":
@@ -75,6 +101,10 @@ if __name__ == "__main__":
     API_KEY: str = os.getenv("WALLET_API_KEY")
     INVOICE_AMOUNT: int = int(os.getenv("INVOICE_AMOUNT", 10))
 
+    GH_TOKEN = os.getenv("GITHUB_TOKEN")
+    GH_REPO = os.getenv("GITHUB_REPOSITORY")
+    PR_NUMBER: int = int(os.getenv("PR_NUMBER"))
+
     CHECK_PAYMENT_ATTEMPTS: int = int(os.getenv("CHECK_PAYMENT_ATTEMPTS", 10))
     CHECK_PAYMENT_DELAY: int = int(os.getenv("CHECK_PAYMENT_DELAY", 30))
 
@@ -82,10 +112,12 @@ if __name__ == "__main__":
         payment_service = PaymentService(BASE_URL, API_KEY)
         invoice: Invoice = payment_service.create_invoice(INVOICE_AMOUNT)
 
-        subprocess.run(
-            ["bash", "-c", "echo Please pay the invoice: {invoice.payment_request}"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+        gh_service = GithubService(GH_TOKEN)
+
+        gh_service.comment_on_pr(
+            GH_REPO,
+            PR_NUMBER,
+            message=f"Please pay the invoice: {invoice.payment_request}"
         )
 
         # TODO: Refactor
@@ -99,6 +131,8 @@ if __name__ == "__main__":
         else:
             print("Fail!")
 
-    except RuntimeError:
+    except CreateInvoiceException:
         # TODO: Refactor
         print("Couldn't create invoice")
+    except GithubException:
+        print("Couldn't post comment!") 
