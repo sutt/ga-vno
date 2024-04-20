@@ -23,7 +23,7 @@ def pay_reward(
         "bolt11": payment_invoice
     }
 
-    url = f"https://{base_url}/api/v1/payment"
+    url = f"https://{base_url}/api/v1/payments"
 
     response = requests.post(url, headers=headers, json=body)
 
