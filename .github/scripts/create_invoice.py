@@ -83,7 +83,9 @@ if __name__ == "__main__":
         invoice: Invoice = payment_service.create_invoice(INVOICE_AMOUNT)
 
         subprocess.run(
-            f"echo Please pay the invoice: {invoice.payment_request}"
+            ["bash", "-c", "echo Please pay the invoice: {invoice.payment_request}"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
         )
 
         # TODO: Refactor
