@@ -77,7 +77,7 @@ class GithubService:
     def __init__(self, gh_token) -> None:
         self.gh_token = gh_token
 
-    def comment_on_pr(self, repo: str, pr_number: int, message: str):
+    def comment_on_pr(self, owner: str, repo: str, pr_number: int, message: str):
         # Set up the headers with the GitHub token
         headers = {
             'Authorization': f'token {self.gh_token}',
@@ -105,6 +105,7 @@ if __name__ == "__main__":
     INVOICE_AMOUNT: int = int(os.getenv("INVOICE_AMOUNT", 10))
 
     GH_TOKEN = os.getenv("GITHUB_TOKEN")
+    GH_OWNER = os.getenv("GITHUB_OWNER")
     GH_REPO = os.getenv("GITHUB_REPOSITORY")
     PR_NUMBER: int = int(os.getenv("PR_NUMBER"))
 
@@ -118,6 +119,7 @@ if __name__ == "__main__":
         gh_service = GithubService(GH_TOKEN)
 
         gh_service.comment_on_pr(
+            GH_OWNER,
             GH_REPO,
             PR_NUMBER,
             message=f"Please pay the invoice: {invoice.payment_request}"
