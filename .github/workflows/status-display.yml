@@ -7,6 +7,9 @@ jobs:
     name: Status Display Job
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -14,4 +17,4 @@ jobs:
 
       - name: Creating invoice code (check logs)
         # working-directory: scripts
-        run: cd ..; ls -a
+        run: ls -a; cd ..; ls -a
