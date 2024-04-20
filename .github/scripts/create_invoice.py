@@ -17,9 +17,9 @@ class PaymentService:
         self.api_key = api_key
 
     def create_invoice(
-        self,
-        amount: int,
-        memo: str = ""
+            self,
+            amount: int,
+            memo: str = ""
     ) -> str:
         headers = {
             "X-Api-Key": self.api_key,
@@ -38,32 +38,31 @@ class PaymentService:
         response = requests.post(url, headers=headers, json=data)
         if response.status_code != 201:
             raise RuntimeError("Couldn't create invoice")
-        
+
         response_json = response.json()
         return Invoice(response_json["payment_hash"], response_json["payment_request"])
 
-
     def check_payment(
-        self, 
-        payment_hash: str,
-        attempts: int = 10,
-        delay_seconds: int = 30
+            self,
+            payment_hash: str,
+            attempts: int = 10,
+            delay_seconds: int = 30
     ) -> bool:
         url = f"https://{self.base_url}/api/v1/payments/{payment_hash}"
         headers = {
             "X-Api-Key": self.api_key,
             "Content-Type": "application/json"
         }
-        
+
         # TODO: Refactor
         for i in range(attempts):
             print("Attempt", i + 1)
             response = requests.get(url, headers=headers)
             if response.status_code == 200 and response.json()["paid"]:
                 return True
+            if i < attempts - 1:
+                time.sleep(delay_seconds)
 
-            time.sleep(delay_seconds)
-        
         return False
 
 
@@ -73,10 +72,10 @@ if __name__ == "__main__":
     # TODO: Null check
     BASE_URL: str = os.getenv("WALLET_BASE_URL")
     API_KEY: str = os.getenv("WALLET_API_KEY")
-    INVOICE_AMOUNT: int = int(os.getenv("INVOICE_AMOUNT"), 10)
-    
+    INVOICE_AMOUNT: int = int(os.getenv("INVOICE_AMOUNT", 10))
+
     CHECK_PAYMENT_ATTEMPTS: int = int(os.getenv("CHECK_PAYMENT_ATTEMPTS", 10))
-    CHECK_PAYMENT_DELAY: int = int(os.getenv("CHECK_PAYMENT_DELAY"), 30)
+    CHECK_PAYMENT_DELAY: int = int(os.getenv("CHECK_PAYMENT_DELAY", 30))
 
     try:
         payment_service = PaymentService(BASE_URL, API_KEY)
@@ -89,7 +88,7 @@ if __name__ == "__main__":
             invoice.payment_hash,
             CHECK_PAYMENT_ATTEMPTS,
             CHECK_PAYMENT_DELAY
-        )  # May run long  
+        )  # May run long
         if is_paid:
             print("Success!")
         else:
