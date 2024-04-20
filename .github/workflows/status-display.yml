@@ -27,7 +27,6 @@ jobs:
       - name: Creating invoice code (check logs)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_OWNER: ${{ github.repository_owner }}
           WALLET_BASE_URL: ${{ secrets.WALLET_BASE_URL }}
           WALLET_API_KEY: ${{ secrets.WALLET_API_KEY }}
           INVOICE_AMOUNT: 1
