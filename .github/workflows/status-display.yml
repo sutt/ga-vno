@@ -13,5 +13,5 @@ jobs:
           python-version: '3.11'
 
       - name: Creating invoice code (check logs)
-        working-directory: scripts
-        run: ./create_invoice.py
+        # working-directory: scripts
+        run: ls -a
