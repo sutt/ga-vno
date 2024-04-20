@@ -12,6 +12,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Creating payment code (check logs)
-        run: pwd
-  
+      - name: Creating invoice code (check logs)
+        working-directory: .github/scripts
+        run: ./create_invoice.py
