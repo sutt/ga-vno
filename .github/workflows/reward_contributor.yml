@@ -1,0 +1,21 @@
+name: Reward Contributor
+
+on: [merge]
+
+jobs:
+  reward_contributor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: List modified files
+        id: list_files
+        run: |
+          echo "::set-output name=files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+
+      - name: Run Python script
+        env:
+          FILES: ${{ steps.list_files.outputs.files }}
+        run: |
+          python .github/scripts/reward_contributor.py $FILES

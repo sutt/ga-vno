@@ -1,8 +1,8 @@
 name: Status Display
 
-on: 
-  pull_request_target:
-    types: [opened]
+on: ['']
+  # pull_request_target:
+  #   types: [opened]
 
 permissions:
   issues: write
