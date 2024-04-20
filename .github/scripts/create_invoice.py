@@ -84,7 +84,7 @@ class GithubService:
             'Accept': 'application/vnd.github.v3+json'
         }
 
-        api_url = f'https://api.github.com/repos/{repo}/issues/{pr_number}/comments'
+        api_url = f'https://api.github.com/repos/{owner}/{repo}/issues/{pr_number}/comments'
 
         response = requests.post(api_url, headers=headers, json={'body': message})
 
