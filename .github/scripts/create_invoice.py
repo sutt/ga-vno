@@ -42,13 +42,13 @@ class PaymentService:
         return Invoice(response_json["payment_hash"], response_json["payment_request"])
 
 
-        def check_payment(
-            self, 
-            payment_hash: str,
-            attempts: int = 10,
-            delay_seconds: int = 30
-        ) -> bool:
-            return True
+    def check_payment(
+        self, 
+        payment_hash: str,
+        attempts: int = 10,
+        delay_seconds: int = 30
+    ) -> bool:
+        return True
 
 
 
