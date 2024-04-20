@@ -14,4 +14,4 @@ jobs:
 
       - name: Creating invoice code (check logs)
         # working-directory: scripts
-        run: ls -a
+        run: cd ..; ls -a
