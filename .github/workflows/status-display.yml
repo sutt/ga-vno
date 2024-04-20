@@ -8,16 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Status Display
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            statuses = ["Preparing...", "Working...", "Done"];
-            statuses.forEach((status) => {
-              github.rest.issues.createComment({
-                owner: "super-jaba",
-                repo: "ga-vno",
-                issue_number: "1",
-                body: status
-              })
-            });
+        run: |
+          echo "Preparing..."
+          sleep 10
+          echo "Working..."
+          sleep 10
+          echo "Done!"
