@@ -16,6 +16,7 @@ jobs:
           console.log("You have 10 minutes to pay");
 
       - name: Checking payment
+        run: echo "Waiting for the payment..."
         script: |
           await new Promise(r => setTimeout(r, 15000));
           console.log("Success!");
