@@ -23,10 +23,3 @@ jobs:
         id: list_files
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} > files.txt
-          echo "::set-output name=files::$(cat files.txt)"
-
-      - name: Run Python script
-        env:
-          FILES: ${{ steps.list_files.outputs.files }}
-        run: |
-          python .github/scripts/reward_contributor.py $FILES
